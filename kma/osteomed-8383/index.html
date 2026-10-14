@@ -498,7 +498,7 @@ body.free .disc,body:not(.free) .nodisc{display:none}
       <div><div class="eyebrow">Opiniões de clientes</div><h2 style="margin:0">O que escrevem as pessoas que encomendaram aqui</h2></div>
       <div class="rv-score"><b>4,8</b><div><div class="stars">★★★★★</div>com base em 2 300 opiniões</div></div>
       <div class="rv-dist"><div><span>5★</span><i style="width:82%"></i><b>82%</b></div><div><span>4★</span><i style="width:14%"></i><b>14%</b></div><div><span>3★</span><i style="width:4%"></i><b>4%</b></div></div>
-      <span class="pill ok" style="align-self:center">↻ 87% dos clientes volta a encomendar</span>
+      <span class="pill ok" style="align-self:center">↻ 87% dos clientes voltam a encomendar</span>
     </div>
     <div class="reviews" id="reviews">
       <div class="review"><div class="head"><div class="avatar" style="background:#1f6feb">M<img src="../../img/av/rv0.jpg" alt="" loading="lazy" onerror="this.remove()"></div><div><div class="name">Maria S.<svg class="src" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#1877f2"/><path d="M13.3 20v-6.2h2.1l.3-2.4h-2.4V9.8c0-.7.2-1.2 1.2-1.2h1.3V6.5c-.2 0-1-.1-1.9-.1-1.9 0-3.1 1.1-3.1 3.2v1.8H8.7v2.4h2.1V20z" fill="#fff"/></svg></div><div class="city">Lisboa · <span class="ago" data-i="0"></span></div></div><span class="verified">✔ compra verificada</span></div><div class="stars">★★★★★</div><p>«Encomendei na segunda à noite e na quarta de manhã já estava cá em casa. Paguei ao estafeta em dinheiro, tudo direitinho.»</p></div>
@@ -754,7 +754,7 @@ body.free .disc,body:not(.free) .nodisc{display:none}
   try{ var st=+localStorage.getItem('lp_stock'); if(st>6&&st<stock) stock=st; }catch(e){}   // остаток не растёт при перезагрузке
   function rs(){ sn.textContent=stock; sn2.textContent=stock; sb.style.width=Math.max(6,(stock/stockMax)*100)+'%'; try{ localStorage.setItem('lp_stock',stock); }catch(e){} }
   rs();
-  var L={"cc": "+351", "phMin": 9, "phMax": 9, "ph0": false, "fem": "a$", "t1m": "acabou de fazer uma encomenda", "t1f": "acabou de fazer uma encomenda", "t2m": "acabou de encomendar 2 embalagens", "t2f": "acabou de encomendar 2 embalagens", "agoMin": " min", "agoH": " h", "agoY": "ontem", "agoD": " dias", "names": ["Maria", "João", "Ana", "Pedro", "Sofia", "Miguel", "Carla", "Rui", "Marta", "Tiago", "Catarina", "Nuno", "Teresa", "Ricardo", "Rita", "Bruno", "Joana", "Paulo", "Cristina", "André"], "cities": ["Lisboa", "Porto", "Vila Nova de Gaia", "Braga", "Amadora", "Coimbra", "Funchal", "Almada", "Setúbal", "Matosinhos", "Aveiro", "Faro", "Guimarães", "Cascais", "Viseu", "Leiria", "Odivelas", "Barreiro", "Évora", "Viana do Castelo"]};   // локаль тостов/дат/телефона (генерится сборкой из i18n)
+  var L={"cc": "+351", "phMin": 9, "phMax": 9, "ph0": false, "fem": "a$", "t1m": "acabou de fazer uma encomenda", "t1f": "acabou de fazer uma encomenda", "t2m": "acabou de encomendar 2 embalagens", "t2f": "acabou de encomendar 2 embalagens", "agoMin": "há {n} min", "agoH": "há {n} h", "agoY": "ontem", "agoD": "há {n} dias", "names": ["Maria", "João", "Ana", "Pedro", "Sofia", "Miguel", "Carla", "Rui", "Marta", "Tiago", "Catarina", "Nuno", "Teresa", "Ricardo", "Rita", "Bruno", "Joana", "Paulo", "Cristina", "André"], "cities": ["Lisboa", "Porto", "Vila Nova de Gaia", "Braga", "Amadora", "Coimbra", "Funchal", "Almada", "Setúbal", "Matosinhos", "Aveiro", "Faro", "Guimarães", "Cascais", "Viseu", "Leiria", "Odivelas", "Barreiro", "Évora", "Viana do Castelo"]};   // локаль тостов/дат/телефона (генерится сборкой из i18n)
   var NAMES=L.names, CITIES=L.cities;
   function drop(){
     if(stock>6){
@@ -801,8 +801,9 @@ body.free .disc,body:not(.free) .nodisc{display:none}
   var AGO=[14,42,96,180,260,420];   // первые шесть — свежие, дальше растёт плавно (отзывов теперь 72)
   Array.prototype.forEach.call(document.querySelectorAll('.ago'),function(el){
     var i=+el.getAttribute('data-i'), m=(i<AGO.length?AGO[i]:Math.round(600+i*i*3.2+i*180)), t;
-    if(m<60) t=m+L.agoMin; else if(m<1440) t=Math.round(m/60)+L.agoH;
-    else if(m<2880) t=L.agoY; else t=Math.round(m/1440)+L.agoD;
+    var agoF=function(n,s){return s.indexOf('{n}')>=0?s.replace('{n}',n):n+s;};   // «vor {n} Min.» / «{n} min temu»
+    if(m<60) t=agoF(m,L.agoMin); else if(m<1440) t=agoF(Math.round(m/60),L.agoH);
+    else if(m<2880) t=L.agoY; else t=agoF(Math.round(m/1440),L.agoD);
     el.textContent=t;
   });
 
